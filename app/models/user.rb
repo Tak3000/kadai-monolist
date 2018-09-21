@@ -11,6 +11,12 @@ class User < ApplicationRecord
   has_many :wants
   has_many :want_items, through: :wants, class_name: 'Item', source: :item
   
+#have function追加
+  has_many :haves, class_name: 'Have'
+  has_many :have_items, through: :haves, class_name: 'Item', source: :item  
+#have function追加
+
+  
   def want(item)
     self.wants.find_or_create_by(item_id: item.id)
   end
@@ -23,5 +29,19 @@ class User < ApplicationRecord
   def want?(item)
     self.want_items.include?(item)
   end  
-  
+
+#have function追加
+  def have(item)
+    self.haves.find_or_create_by(item_id: item.id)
+  end
+
+  def unhave(item)
+    have = self.haves.find_by(item_id: item.id)
+    have.destroy if have
+  end
+
+  def have?(item)
+    self.have_items.include?(item)
+  end
+#have function追加  
 end
